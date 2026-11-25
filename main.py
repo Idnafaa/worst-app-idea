@@ -19,9 +19,11 @@ def main():
     text = PITCH.strip()
     if not 1 <= len(text) <= 240:
         raise SystemExit(f"pitch is {len(text)} characters, must be 1-240")
-    if text.count(".") != 1 or not text.endswith("."):
+    if "\n" in text or text.count(".") != 1 or not text.endswith("."):
         raise SystemExit("pitch must be exactly one sentence")
-    outdir = "/output"
+    if "?" in text or "!" in text:
+        raise SystemExit("pitch must be one plain declarative sentence")
+    outdir = os.environ.get("OUTPUT_DIR", "/output")
     os.makedirs(outdir, exist_ok=True)
     path = os.path.join(outdir, "entry.txt")
     with open(path, "w", encoding="utf-8") as handle:
